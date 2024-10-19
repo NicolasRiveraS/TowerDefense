@@ -1,5 +1,5 @@
-## Tower Defense
-# Integrantes:
+# Tower Defense
+## Integrantes:
 Nicolás Rivera Smith-Palliser
 Gabriel Reyes Loria
 Samira Villalobos Rojas
