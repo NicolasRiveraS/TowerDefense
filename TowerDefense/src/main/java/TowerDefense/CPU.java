@@ -1,4 +1,4 @@
-package com.mycompany.juego;
+package TowerDefense;
 
     // Clase CPU
 class CPU extends Jugador {

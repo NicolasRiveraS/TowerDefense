@@ -1,4 +1,4 @@
-package com.mycompany.juego;
+package TowerDefense;
 
 // Clase Caballero
 class Caballero extends Tropa {

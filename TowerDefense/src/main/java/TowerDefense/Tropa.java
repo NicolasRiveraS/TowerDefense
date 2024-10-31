@@ -1,4 +1,4 @@
-package com.mycompany.juego;
+package TowerDefense;
 
 public abstract class Tropa {
     protected Tipo tipo;      

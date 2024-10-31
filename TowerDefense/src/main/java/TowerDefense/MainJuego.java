@@ -1,6 +1,6 @@
-package com.mycompany.juego;
+package TowerDefense;
 
-public class Juego {
+public class MainJuego {
 
     
     public static void main(String[] args) {

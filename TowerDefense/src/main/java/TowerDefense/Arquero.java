@@ -1,4 +1,4 @@
-package com.mycompany.juego;
+package TowerDefense;
 
 class Arquero extends Tropa {
     public Arquero() {

@@ -1,4 +1,4 @@
-package com.mycompany.juego;
+package TowerDefense;
 
 public class Tipo {
     private String nombre;
