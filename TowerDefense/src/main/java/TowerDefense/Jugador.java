@@ -1,7 +1,5 @@
 package TowerDefense;
 
-    
-    
 class Jugador {
     private Castillo castillo;
     private Pila tropasSeleccionadas; 

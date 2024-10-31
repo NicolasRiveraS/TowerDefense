@@ -6,7 +6,7 @@ class Castillo {
     private int puntosVida;
 
     public Castillo() {
-        this.puntosVida = 10; // Puntos de vida inicial del castillo
+        this.puntosVida = 10;
     }
 
     public void recibirDanio(int cantidad) {

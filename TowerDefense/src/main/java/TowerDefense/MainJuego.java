@@ -8,7 +8,7 @@ public class MainJuego {
         CPU cpu = new CPU();
 
         
-        jugador.seleccionarTropas(new Arquero()); // Suponiendo una subclase `Arquero` de `Tropa`
+        jugador.seleccionarTropas(new Arquero());
         cpu.seleccionarTropasAleatoriamente();
 
         

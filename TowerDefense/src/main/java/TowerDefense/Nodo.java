@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package TowerDefense;
 
-/**
- *
- * @author greye
- */
 public class Nodo {
     private Dato elemento; 
     private String dato;   
@@ -71,9 +63,8 @@ public class Nodo {
 
     @Override
     public String toString() {
-        // Mostrar `elemento` si es de tipo Dato o `dato` si es de tipo String
         if (elemento != null) {
-            return elemento.getNombre(); // Asumiendo que Dato tiene un método getNombre()
+            return elemento.getNombre();
         } else {
             return dato;
         }
