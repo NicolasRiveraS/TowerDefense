@@ -3,23 +3,23 @@ package TowerDefense;
 class Jugador {
     // Atributos
     protected Castillo castillo;
-    private final ListaCDTropas listaTropas;
+    protected ColaTropas colaTropas;
 
     // Constructor
     public Jugador() {
         this.castillo = new Castillo();
-        this.listaTropas = new ListaCDTropas();
+        this.colaTropas = new ColaTropas();
     }
 
     // Método para atacar al CPU
-    public void atacar(CPU cpu) {
-        // Procesar el ataque de las tropas del jugador al castillo del CPU
-        while (!listaTropas.estaVacia()) {
-            Tropa tropa = listaTropas.desencolar();
-            System.out.println("Tropa " + tropa.getTipo() + " ataca al castillo del CPU.");
-            cpu.getCastillo().recibirDaño((int) tropa.getDaño());
-        }
-    }
+//    public void atacar(CPU cpu) {
+//        // Procesar el ataque de las tropas del jugador al castillo del CPU
+//        while (!listaTropas.estaVacia()) {
+//            Tropa tropa = listaTropas.desencolar();
+//            System.out.println("Tropa " + tropa.getTipo() + " ataca al castillo del CPU.");
+//            cpu.getCastillo().recibirDaño((int) tropa.getDaño());
+//        }
+//    }
 
     // Método para seleccionar tropas
     public void seleccionTropas(int numeroRonda) {
@@ -39,17 +39,17 @@ class Jugador {
         int magos = seleccionTropas.getCantidadMagos();
 
         for (int i = 0; i < arqueros; i++) {
-            listaTropas.encolar(new Arquero());
+            colaTropas.encolar(new Arquero());
         }
         for (int i = 0; i < caballeros; i++) {
-            listaTropas.encolar(new Caballero());
+            colaTropas.encolar(new Caballero());
         }
         for (int i = 0; i < magos; i++) {
-            listaTropas.encolar(new Mago());
+            colaTropas.encolar(new Mago());
         }
 
-        System.out.println("Tropas seleccionadas y agregadas a la lista:");
-        System.out.println(listaTropas);
+        System.out.println("Tropas seleccionadas y agregadas a la cola:");
+        System.out.println(colaTropas);
     }
 
     // Método para obtener el castillo del jugador
@@ -58,8 +58,8 @@ class Jugador {
     }
 
     // Método para obtener la lista de tropas enviadas
-    public ListaCDTropas getTropasEnviadas() {
-        return listaTropas;
+    public ColaTropas getTropasEnviadas() {
+        return colaTropas;
     }
 }
 

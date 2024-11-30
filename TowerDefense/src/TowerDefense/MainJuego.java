@@ -25,20 +25,17 @@ public class MainJuego {
         
         Jugador jugador = new Jugador();                                        // Una vez iniciada la partida, se crea un jugador      
         CPU cpu = new CPU();                                                    // Crea un nuevo oponente CPU      
-
+           
         // Ciclo principal del juego (por rondas)
         while (jugador.getCastillo().getPuntosVida() > 0 && cpu.getCastillo().getPuntosVida() > 0) {
             // Comprobación temporal de la ronda
             System.out.println("Ronda " + numeroRonda);
 
-            // Manejar la invasión (agrega enemigos a la CPU antes de la batalla)
-            manejarInvasion(cpu);
+            // Selección de tropas del CPU
+            cpu.seleccionTropas(numeroRonda);
 
             // Selección de tropas del jugador
             jugador.seleccionTropas(numeroRonda);
-
-            // Selección de tropas de la CPU
-            cpu.seleccionarTropasAleatoriamente();
 
             // Iniciar batalla
             iniciarBatalla(jugador, cpu);
@@ -60,21 +57,21 @@ public class MainJuego {
     }
 
 
-    public static void manejarInvasion(CPU cpu) {
-        Invasion invasion = new Invasion();
-
-
-        invasion.agregarEnemigo(new Caballero());
-        invasion.agregarEnemigo(new Mago());
-
- 
-        while (invasion.hayEnemigos()) {
-            Tropa enemigo = invasion.obtenerSiguienteEnemigo();
-            cpu.agregarTropa(enemigo);
-        }
-
-        System.out.println("Enemigos agregados al CPU desde la invasión.");
-    }
+//    public static void manejarInvasion(CPU cpu) {
+//        Invasion invasion = new Invasion();
+//
+//
+//        invasion.agregarEnemigo(new Caballero());
+//        invasion.agregarEnemigo(new Mago());
+//
+// 
+//        while (invasion.hayEnemigos()) {
+//            Tropa enemigo = invasion.obtenerSiguienteEnemigo();
+//            cpu.agregarTropa(enemigo);
+//        }
+//
+//        System.out.println("Enemigos agregados al CPU desde la invasión.");
+//    }
 
     
     private static void iniciarBatalla(Jugador jugador, CPU cpu) {
