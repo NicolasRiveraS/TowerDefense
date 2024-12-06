@@ -4,6 +4,7 @@ class Jugador {
     // Atributos
     protected Castillo castillo;
     protected ColaTropas colaTropas;
+    protected int cantidadTropas = 0;
 
     // Constructor
     public Jugador() {
@@ -30,7 +31,8 @@ class Jugador {
         while (seleccionTropas.isVisible()) {
             try {
                 Thread.sleep(100); 
-            } catch (InterruptedException e) {
+            } 
+            catch (InterruptedException e) {
             }
         }
 
@@ -40,12 +42,15 @@ class Jugador {
 
         for (int i = 0; i < arqueros; i++) {
             colaTropas.encolar(new Arquero());
+            cantidadTropas++;
         }
         for (int i = 0; i < caballeros; i++) {
             colaTropas.encolar(new Caballero());
+            cantidadTropas++;
         }
         for (int i = 0; i < magos; i++) {
             colaTropas.encolar(new Mago());
+            cantidadTropas++;
         }
 
         System.out.println("Tropas seleccionadas y agregadas a la cola:");
@@ -57,11 +62,17 @@ class Jugador {
         return castillo;
     }
 
-    // Método para obtener la lista de tropas enviadas
-    public ColaTropas getTropasEnviadas() {
+    // Método para obtener la cola de tropas enviadas
+    public ColaTropas getTropasAlmacenadas() {
         return colaTropas;
     }
-}
-
     
-
+    // Método para obtener cantidad de tropas
+    public int getCantidadTropas() {
+        return cantidadTropas;
+    }
+    
+    public void tropaUtilizada () {
+        this.cantidadTropas--;
+    }
+}

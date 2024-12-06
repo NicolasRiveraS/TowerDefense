@@ -77,7 +77,7 @@
           <Font name="Segoe UI" size="18" style="1"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Iconos/back-button (1).png"/>
+          <Image iconType="3" name="/Iconos/back-button.png"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>

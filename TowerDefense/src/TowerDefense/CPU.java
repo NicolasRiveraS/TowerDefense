@@ -33,11 +33,18 @@ class CPU extends Jugador {
         }
     }
     
+    // Selecciona el camino por el cual envía sus tropas
+    public int seleccionarCaminoTablero () {
+        int seleccion = r.nextInt(1, 3);
+        return seleccion;
+    }
+    
     // Agrega tropas a la cola del CPU
     @Override
     public void seleccionTropas (int numeroRonda) {
         for (int i = 0; i < numeroRonda; i++) {
             colaTropas.encolar(seleccionarTropasAleatoriamente());
+            cantidadTropas++;
         }
     }
 }

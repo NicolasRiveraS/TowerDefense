@@ -1,32 +1,155 @@
 package TowerDefense;
 
+import java.awt.Color;
+
 public class TableroBatalla extends javax.swing.JFrame {
     // Atributos
+    private static int rival;
+    private static Jugador jugador;
+    private static CPU cpu;
     private static int numeroRonda;
+    private boolean auxTropasVisibles;
+    private ColaTropas colaTropasVisiblesJugador;  // Cola en la cual se almacenan únicamente las tropas del jugador visibles en el tablero
+    private ColaTropas colaTropasVisiblesCPU;      // Cola en la cual se almacenan únicamente las tropas del CPU visibles en el tablero
+    private Tropa tropaActivaJugador;
+    private Tropa tropaActivaCPU;
     
     // Constructor
-    public TableroBatalla(int numeroRonda) {
+    public TableroBatalla(int rival, Jugador jugador, CPU cpu, int numeroRonda) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        this.rival = rival;
+        this.jugador = jugador;
+        this.cpu = cpu;
         this.numeroRonda = numeroRonda;
+        this.auxTropasVisibles = true;
+        this.colaTropasVisiblesJugador = new ColaTropas();
+        this.colaTropasVisiblesCPU = new ColaTropas();
         setTitle("RONDA " + this.numeroRonda);
+        ronda.setText("RONDA " + this.numeroRonda);
+        tropasRestantesCPU.setText("Tropas restantes: " + cpu.getCantidadTropas());
+        tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+        setImagenCastillo();
+        setTropasVisibles();
     }
 
     // Métodos
+    
+    // Establece la imagen del castillo por cada rival
+    public void setImagenCastillo () {
+        switch (rival) {
+            case 1:
+                castilloJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 1.png")));
+                castilloRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 2.png")));
+                break;
+                
+            case 2:
+                castilloJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 2.png")));
+                castilloRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 3.png")));
+                break;
+                
+            case 3:
+                castilloJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 3.png")));
+                castilloRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 4.png")));
+                break;
+                
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    // Encola las tropas a las colas para las tropas visibles en el tablero y asigna los íconos por cada tropa
+    public void setTropasVisibles () {
+        // Caso inicial en el cual se necesitan colocar las primeras 3 tropas
+        if (auxTropasVisibles) {
+            // Jugador
+            for (int i = 0; i < jugador.getCantidadTropas(); i++) {
+                if (tropaJugador1.getIcon() == null) {
+                    colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
+                    tropaJugador1.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                } else if (tropaJugador2.getIcon() == null) {
+                    colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
+                    tropaJugador2.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                } else if (tropaJugador3.getIcon() == null) {
+                    colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
+                    tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                } else {
+                    break;
+                }
+            }
+
+            // CPU
+            for (int i = 0; i < cpu.getCantidadTropas(); i++) {
+                if (tropaRival1.getIcon() == null) {
+                    colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
+                    tropaRival1.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                } else if (tropaRival2.getIcon() == null) {
+                    colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
+                    tropaRival2.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                } else if (tropaRival3.getIcon() == null) {
+                    colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
+                    tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                } else {
+                    break;
+                }
+            }
+            
+            this.auxTropasVisibles = false;
+        }
+        
+        // Caso "in-game" para actualización de las tropas disponibles
+        else {
+            // Jugador
+            if (jugador.getCantidadTropas() >= 3) {
+                colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
+                tropaJugador1.setIcon(tropaJugador2.getIcon());
+                tropaJugador2.setIcon(tropaJugador3.getIcon());
+                tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(2).icono);
+            }
+            else if (jugador.getCantidadTropas() == 2) {
+                tropaJugador1.setIcon(tropaJugador2.getIcon());
+                tropaJugador2.setIcon(tropaJugador3.getIcon());
+                tropaJugador3.setIcon(null);
+            }
+            else if (jugador.getCantidadTropas() == 1) {
+                tropaJugador1.setIcon(tropaJugador2.getIcon());
+                tropaJugador2.setIcon(null);
+                tropaJugador3.setIcon(null);
+            }
+        }
+    }
+    
+    // Método para delay
+    public void delay (int s) {
+        int ms = s * 1000;  // Conversión de segundos a milisegundos
+        try {
+            Thread.sleep(ms);
+        } 
+        catch (InterruptedException e) {
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        casillaCastilloSuperior = new javax.swing.JLabel();
+        casillaCastilloInferior = new javax.swing.JLabel();
+        casillaSuperiorIzquierda = new javax.swing.JLabel();
+        casillaMedioIzquierda = new javax.swing.JLabel();
+        casillaInferiorIzquierda = new javax.swing.JLabel();
+        casillaSuperiorDerecha = new javax.swing.JLabel();
+        casillaMedioDerecha = new javax.swing.JLabel();
+        casillaInferiorDerecha = new javax.swing.JLabel();
+        castilloJugador = new javax.swing.JLabel();
+        castilloRival = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        puenteIzquierdo = new javax.swing.JLabel();
+        puenteDerecho = new javax.swing.JLabel();
+        ronda = new javax.swing.JLabel();
+        rio = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -34,51 +157,100 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        tropaJugador3 = new javax.swing.JLabel();
+        tropaJugador1 = new javax.swing.JLabel();
+        tropaJugador2 = new javax.swing.JLabel();
+        tropaRival1 = new javax.swing.JLabel();
+        tropaRival2 = new javax.swing.JLabel();
+        tropaRival3 = new javax.swing.JLabel();
+        tropasRestantesCPU = new javax.swing.JLabel();
+        tropasRestantesJugador = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        caminoIzquierdoSeleccion = new javax.swing.JButton();
+        caminoDerechoSeleccion = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(73, 142, 69));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 1.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 548, -1, -1));
+        casillaCastilloSuperior.setBackground(new java.awt.Color(198, 173, 125));
+        casillaCastilloSuperior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaCastilloSuperior.setOpaque(true);
+        jPanel1.add(casillaCastilloSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 50, 50));
 
-        jLabel1.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 70, 120));
+        casillaCastilloInferior.setBackground(new java.awt.Color(198, 173, 125));
+        casillaCastilloInferior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaCastilloInferior.setOpaque(true);
+        jPanel1.add(casillaCastilloInferior, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 490, 50, 50));
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 2.png"))); // NOI18N
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, -1, -1));
+        casillaSuperiorIzquierda.setBackground(new java.awt.Color(198, 173, 125));
+        casillaSuperiorIzquierda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaSuperiorIzquierda.setOpaque(true);
+        jPanel1.add(casillaSuperiorIzquierda, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, 50));
+
+        casillaMedioIzquierda.setBackground(new java.awt.Color(153, 153, 153));
+        casillaMedioIzquierda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaMedioIzquierda.setOpaque(true);
+        jPanel1.add(casillaMedioIzquierda, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, 50, 50));
+
+        casillaInferiorIzquierda.setBackground(new java.awt.Color(198, 173, 125));
+        casillaInferiorIzquierda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaInferiorIzquierda.setOpaque(true);
+        jPanel1.add(casillaInferiorIzquierda, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 490, 50, 50));
+
+        casillaSuperiorDerecha.setBackground(new java.awt.Color(198, 173, 125));
+        casillaSuperiorDerecha.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaSuperiorDerecha.setOpaque(true);
+        jPanel1.add(casillaSuperiorDerecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 180, 50, 50));
+
+        casillaMedioDerecha.setBackground(new java.awt.Color(153, 153, 153));
+        casillaMedioDerecha.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaMedioDerecha.setOpaque(true);
+        jPanel1.add(casillaMedioDerecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 340, 50, 50));
+
+        casillaInferiorDerecha.setBackground(new java.awt.Color(198, 173, 125));
+        casillaInferiorDerecha.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        casillaInferiorDerecha.setOpaque(true);
+        jPanel1.add(casillaInferiorDerecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 490, 50, 50));
+
+        castilloJugador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        castilloJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 1.png"))); // NOI18N
+        jPanel1.add(castilloJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 548, -1, -1));
+
+        castilloRival.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        castilloRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/castle 2.png"))); // NOI18N
+        jPanel1.add(castilloRival, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, -1, -1));
 
         jLabel5.setBackground(new java.awt.Color(198, 173, 125));
         jLabel5.setOpaque(true);
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, 50, 30));
 
-        jLabel6.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel6.setOpaque(true);
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, 70, 120));
+        puenteIzquierdo.setBackground(new java.awt.Color(153, 153, 153));
+        puenteIzquierdo.setOpaque(true);
+        jPanel1.add(puenteIzquierdo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 70, 120));
 
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(77, 165, 234));
-        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel22.setText("RONDA 0");
-        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 230, 100));
+        puenteDerecho.setBackground(new java.awt.Color(153, 153, 153));
+        puenteDerecho.setOpaque(true);
+        jPanel1.add(puenteDerecho, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, 70, 120));
 
-        jLabel2.setBackground(new java.awt.Color(25, 94, 147));
-        jLabel2.setForeground(new java.awt.Color(25, 94, 147));
-        jLabel2.setOpaque(true);
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 308, 608, 100));
+        ronda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ronda.setForeground(new java.awt.Color(77, 165, 234));
+        ronda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ronda.setText("RONDA 0");
+        jPanel1.add(ronda, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 230, 100));
+
+        rio.setBackground(new java.awt.Color(25, 94, 147));
+        rio.setForeground(new java.awt.Color(25, 94, 147));
+        rio.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        rio.setOpaque(true);
+        jPanel1.add(rio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 308, 608, 100));
 
         jLabel7.setBackground(new java.awt.Color(198, 173, 125));
         jLabel7.setOpaque(true);
@@ -98,54 +270,114 @@ public class TableroBatalla extends javax.swing.JFrame {
 
         jLabel11.setBackground(new java.awt.Color(198, 173, 125));
         jLabel11.setOpaque(true);
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 250, 40));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 250, 50));
 
         jLabel12.setBackground(new java.awt.Color(198, 173, 125));
         jLabel12.setOpaque(true);
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 500, 250, 40));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 490, 250, 50));
 
         jLabel13.setBackground(new java.awt.Color(198, 173, 125));
         jLabel13.setOpaque(true);
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 540, 50, 50));
 
-        jLabel14.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel14.setOpaque(true);
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 640, 60, 60));
+        tropaJugador3.setBackground(new java.awt.Color(204, 204, 204));
+        tropaJugador3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaJugador3.setOpaque(true);
+        jPanel1.add(tropaJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 650, 50, 50));
 
-        jLabel15.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel15.setOpaque(true);
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 640, 60, 60));
+        tropaJugador1.setBackground(new java.awt.Color(204, 204, 204));
+        tropaJugador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaJugador1.setOpaque(true);
+        jPanel1.add(tropaJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 650, 50, 50));
 
-        jLabel16.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel16.setOpaque(true);
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 640, 60, 60));
+        tropaJugador2.setBackground(new java.awt.Color(204, 204, 204));
+        tropaJugador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaJugador2.setOpaque(true);
+        jPanel1.add(tropaJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 650, 50, 50));
 
-        jLabel17.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel17.setOpaque(true);
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 60, 60));
+        tropaRival1.setBackground(new java.awt.Color(204, 204, 204));
+        tropaRival1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaRival1.setOpaque(true);
+        jPanel1.add(tropaRival1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 50, 50));
 
-        jLabel18.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel18.setOpaque(true);
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 60, 60));
+        tropaRival2.setBackground(new java.awt.Color(204, 204, 204));
+        tropaRival2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaRival2.setOpaque(true);
+        jPanel1.add(tropaRival2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 50, 50));
 
-        jLabel19.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel19.setOpaque(true);
-        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 60, 60));
+        tropaRival3.setBackground(new java.awt.Color(204, 204, 204));
+        tropaRival3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropaRival3.setOpaque(true);
+        jPanel1.add(tropaRival3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 50, 50));
 
-        jLabel20.setBackground(new java.awt.Color(221, 221, 221));
-        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(221,221,221));
-        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText("Tropas restantes: 0");
-        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 20, -1, -1));
+        tropasRestantesCPU.setBackground(new java.awt.Color(221, 221, 221));
+        tropasRestantesCPU.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        tropasRestantesCPU.setForeground(new java.awt.Color(221,221,221));
+        tropasRestantesCPU.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropasRestantesCPU.setText("Tropas restantes: 0");
+        jPanel1.add(tropasRestantesCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 20, -1, -1));
 
-        jLabel21.setBackground(new java.awt.Color(221, 221, 221));
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(221,221,221));
-        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel21.setText("Tropas restantes: 0");
-        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 680, -1, -1));
+        tropasRestantesJugador.setBackground(new java.awt.Color(221, 221, 221));
+        tropasRestantesJugador.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        tropasRestantesJugador.setForeground(new java.awt.Color(221,221,221));
+        tropasRestantesJugador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tropasRestantesJugador.setText("Tropas restantes: 0");
+        jPanel1.add(tropasRestantesJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 680, -1, -1));
         jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 610, 20));
+
+        caminoIzquierdoSeleccion.setBackground(new java.awt.Color(255, 255, 255));
+        caminoIzquierdoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba.png"))); // NOI18N
+        caminoIzquierdoSeleccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caminoIzquierdoSeleccionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(caminoIzquierdoSeleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 550, 50, 50));
+
+        caminoDerechoSeleccion.setBackground(new java.awt.Color(255, 255, 255));
+        caminoDerechoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba.png"))); // NOI18N
+        caminoDerechoSeleccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caminoDerechoSeleccionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(caminoDerechoSeleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 550, 50, 50));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(221,221,221));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("3");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 50, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(221,221,221));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("1");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 50, -1));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(221,221,221));
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("2");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 50, -1));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(221,221,221));
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("3");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 620, 50, -1));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(221,221,221));
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("2");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 620, 50, -1));
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(221,221,221));
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("1");
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 620, 50, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,6 +392,29 @@ public class TableroBatalla extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void caminoIzquierdoSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminoIzquierdoSeleccionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caminoIzquierdoSeleccionActionPerformed
+
+    // Camino Derecho
+    private void caminoDerechoSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminoDerechoSeleccionActionPerformed
+        caminoDerechoSeleccion.setEnabled(false);
+        caminoIzquierdoSeleccion.setEnabled(false);
+
+        // Jugador
+        if (casillaInferiorDerecha.getIcon() == null && tropaActivaJugador == null) {
+            tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
+            casillaInferiorDerecha.setIcon(tropaActivaJugador.icono);
+            
+            jugador.tropaUtilizada();
+            tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+
+            setTropasVisibles();
+            
+        }
+        
+    }//GEN-LAST:event_caminoDerechoSeleccionActionPerformed
 
 
     public static void main(String args[]) {
@@ -189,13 +444,24 @@ public class TableroBatalla extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TableroBatalla(numeroRonda).setVisible(true);
+                new TableroBatalla(rival, jugador, cpu, numeroRonda).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton caminoDerechoSeleccion;
+    private javax.swing.JButton caminoIzquierdoSeleccion;
+    private javax.swing.JLabel casillaCastilloInferior;
+    private javax.swing.JLabel casillaCastilloSuperior;
+    private javax.swing.JLabel casillaInferiorDerecha;
+    private javax.swing.JLabel casillaInferiorIzquierda;
+    private javax.swing.JLabel casillaMedioDerecha;
+    private javax.swing.JLabel casillaMedioIzquierda;
+    private javax.swing.JLabel casillaSuperiorDerecha;
+    private javax.swing.JLabel casillaSuperiorIzquierda;
+    private javax.swing.JLabel castilloJugador;
+    private javax.swing.JLabel castilloRival;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -204,20 +470,25 @@ public class TableroBatalla extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel puenteDerecho;
+    private javax.swing.JLabel puenteIzquierdo;
+    private javax.swing.JLabel rio;
+    private javax.swing.JLabel ronda;
+    private javax.swing.JLabel tropaJugador1;
+    private javax.swing.JLabel tropaJugador2;
+    private javax.swing.JLabel tropaJugador3;
+    private javax.swing.JLabel tropaRival1;
+    private javax.swing.JLabel tropaRival2;
+    private javax.swing.JLabel tropaRival3;
+    private javax.swing.JLabel tropasRestantesCPU;
+    private javax.swing.JLabel tropasRestantesJugador;
     // End of variables declaration//GEN-END:variables
 }

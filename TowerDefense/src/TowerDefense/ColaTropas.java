@@ -37,7 +37,22 @@ public class ColaTropas {
             return null;
         }
     }
+    
+    // Método para mostrar elementos de la cola (sin desencolar las tropas)
+    public Tropa mostrar (int itera) {
+        Nodo aux = frente;
 
+        if (aux != null) {
+            for (int j = 0; j < itera; j++) {
+                aux = aux.getBack();
+            }
+            return aux.getTropa();
+        }
+        else {
+            return null;
+        }
+    }
+    
     @Override
     public String toString() {
         String s = "Cola de Tropas:\n";

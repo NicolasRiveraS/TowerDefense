@@ -1,12 +1,15 @@
 package TowerDefense;
 
+import javax.swing.Icon;
+
 public abstract class Tropa {
     // Atributos
     protected String tipo;      
     protected int puntosVida;       
     protected double daño;
     protected String fortaleza;
-    protected String debilidad; 
+    protected String debilidad;
+    protected Icon icono;
 
     // Constructor
     public Tropa(String tipo, int vida, double daño, String fortaleza, String debilidad) {
