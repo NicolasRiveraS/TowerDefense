@@ -1,7 +1,5 @@
 package TowerDefense;
 
-import java.awt.Color;
-
 public class TableroBatalla extends javax.swing.JFrame {
     // Atributos
     private static int rival;
@@ -19,6 +17,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        this.continuarBoton.setEnabled(false);
         this.rival = rival;
         this.jugador = jugador;
         this.cpu = cpu;
@@ -117,16 +116,59 @@ public class TableroBatalla extends javax.swing.JFrame {
                 tropaJugador2.setIcon(null);
                 tropaJugador3.setIcon(null);
             }
+            else if (jugador.getCantidadTropas() == 0) {
+                tropaJugador1.setIcon(null);
+                tropaJugador2.setIcon(null);
+                tropaJugador3.setIcon(null);
+            }
         }
     }
     
-    // Método para delay
-    public void delay (int s) {
-        int ms = s * 1000;  // Conversión de segundos a milisegundos
-        try {
-            Thread.sleep(ms);
-        } 
-        catch (InterruptedException e) {
+    public void caminoDerecho () {
+        continuarBoton.setEnabled(true);
+        caminoDerechoSeleccion.setEnabled(false);
+        caminoIzquierdoSeleccion.setEnabled(false);
+
+        // Jugador
+        // Si no hay tropas activas en el tablero
+        if (tropaActivaJugador == null) {
+            tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
+            casillaInferiorDerecha.setIcon(tropaActivaJugador.icono);
+
+            jugador.tropaUtilizada();
+            tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+
+            setTropasVisibles();
+        }
+        // Si existe una tropa activa en el tablero
+        else if (tropaActivaJugador != null) {
+            // Si está en la casilla de abajo
+            if (casillaInferiorDerecha.getIcon() != null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() == null) {
+                casillaInferiorDerecha.setIcon(null);
+                casillaMedioDerecha.setIcon(tropaActivaJugador.icono);
+            }
+            // Si está en la casilla del medio
+            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() != null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() == null) {
+                casillaMedioDerecha.setIcon(null);
+                casillaSuperiorDerecha.setIcon(tropaActivaJugador.icono);
+            }
+            // Si está en la casilla de arriba
+            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() != null && casillaCastilloSuperior.getIcon() == null) {
+                casillaSuperiorDerecha.setIcon(null);
+                casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
+            }
+            // Si está en la casilla del castillo enemigo
+            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() != null) {
+                casillaCastilloSuperior.setIcon(null);
+                
+                if (jugador.getCantidadTropas() > 0) {
+                    caminoDerechoSeleccion.setEnabled(true);
+                    caminoIzquierdoSeleccion.setEnabled(true);
+                }
+                
+                continuarBoton.setEnabled(false);
+                tropaActivaJugador = null;
+            }
         }
     }
     
@@ -174,6 +216,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        continuarBoton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -379,6 +422,18 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel17.setText("1");
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 620, 50, -1));
 
+        continuarBoton.setBackground(new java.awt.Color(0, 102, 255));
+        continuarBoton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        continuarBoton.setForeground(new java.awt.Color(255, 255, 255));
+        continuarBoton.setText("Continuar");
+        continuarBoton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        continuarBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                continuarBotonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(continuarBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 680, 110, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -399,22 +454,13 @@ public class TableroBatalla extends javax.swing.JFrame {
 
     // Camino Derecho
     private void caminoDerechoSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminoDerechoSeleccionActionPerformed
-        caminoDerechoSeleccion.setEnabled(false);
-        caminoIzquierdoSeleccion.setEnabled(false);
-
-        // Jugador
-        if (casillaInferiorDerecha.getIcon() == null && tropaActivaJugador == null) {
-            tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
-            casillaInferiorDerecha.setIcon(tropaActivaJugador.icono);
-            
-            jugador.tropaUtilizada();
-            tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
-
-            setTropasVisibles();
-            
-        }
-        
+        caminoDerecho();
     }//GEN-LAST:event_caminoDerechoSeleccionActionPerformed
+
+    // Botón Continuar
+    private void continuarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continuarBotonActionPerformed
+        caminoDerecho();
+    }//GEN-LAST:event_continuarBotonActionPerformed
 
 
     public static void main(String args[]) {
@@ -462,6 +508,7 @@ public class TableroBatalla extends javax.swing.JFrame {
     private javax.swing.JLabel casillaSuperiorIzquierda;
     private javax.swing.JLabel castilloJugador;
     private javax.swing.JLabel castilloRival;
+    private javax.swing.JButton continuarBoton;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
