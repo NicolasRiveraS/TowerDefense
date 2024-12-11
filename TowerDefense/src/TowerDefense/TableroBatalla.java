@@ -1,5 +1,7 @@
 package TowerDefense;
 
+import javax.swing.*;
+
 public class TableroBatalla extends javax.swing.JFrame {
     // Atributos
     private static int rival;
@@ -30,6 +32,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         tropasRestantesCPU.setText("Tropas restantes: " + cpu.getCantidadTropas());
         tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
         setImagenCastillo();
+        barraSalud();
         setTropasVisibles();
     }
 
@@ -58,7 +61,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         }
     }
     
-    // Encola las tropas a las colas para las tropas visibles en el tablero y asigna los íconos por cada tropa
+    // Encola las tropas a las colas respectivas para las tropas visibles en el tablero y asigna los íconos por cada tropa
     public void setTropasVisibles () {
         // Caso inicial en el cual se necesitan colocar las primeras 3 tropas
         if (auxTropasVisibles) {
@@ -121,54 +124,298 @@ public class TableroBatalla extends javax.swing.JFrame {
                 tropaJugador2.setIcon(null);
                 tropaJugador3.setIcon(null);
             }
+            
+            // Cpu
+            if (cpu.getCantidadTropas() >= 3) {
+                colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
+                tropaRival1.setIcon(tropaRival2.getIcon());
+                tropaRival2.setIcon(tropaRival3.getIcon());
+                tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(2).icono);
+            }
+            else if (cpu.getCantidadTropas() == 2) {
+                tropaRival1.setIcon(tropaRival2.getIcon());
+                tropaRival2.setIcon(tropaRival3.getIcon());
+                tropaRival3.setIcon(null);
+            }
+            else if (cpu.getCantidadTropas() == 1) {
+                tropaRival1.setIcon(tropaRival2.getIcon());
+                tropaRival2.setIcon(null);
+                tropaRival3.setIcon(null);
+            }
+            else if (cpu.getCantidadTropas() == 0) {
+                tropaRival1.setIcon(null);
+                tropaRival2.setIcon(null);
+                tropaRival3.setIcon(null);
+            }
         }
     }
     
+    // Método del Jugador para moverse por el camino derecho del tablero
     public void caminoDerecho () {
         continuarBoton.setEnabled(true);
         caminoDerechoSeleccion.setEnabled(false);
         caminoIzquierdoSeleccion.setEnabled(false);
-
-        // Jugador
+        
         // Si no hay tropas activas en el tablero
         if (tropaActivaJugador == null) {
             tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
             casillaInferiorDerecha.setIcon(tropaActivaJugador.icono);
+            tropaActivaJugador.setPosicionTablero(1);
 
             jugador.tropaUtilizada();
             tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+            
+            caminosCPU();
 
             setTropasVisibles();
         }
         // Si existe una tropa activa en el tablero
         else if (tropaActivaJugador != null) {
-            // Si está en la casilla de abajo
-            if (casillaInferiorDerecha.getIcon() != null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() == null) {
-                casillaInferiorDerecha.setIcon(null);
-                casillaMedioDerecha.setIcon(tropaActivaJugador.icono);
+            switch (tropaActivaJugador.getPosicionTablero()) {
+                // Si está en la casilla de abajo
+                case 1:
+                    casillaInferiorDerecha.setIcon(null);
+                    tropaActivaJugador.setPosicionTablero(2);
+                    caminosCPU();
+                    if (tropaActivaJugador.icono != null) {
+                        casillaMedioDerecha.setIcon(tropaActivaJugador.icono);
+                    }
+                    break;
+                // Si está en la casilla del medio
+                case 2:
+                    casillaMedioDerecha.setIcon(null);
+                    casillaSuperiorDerecha.setIcon(tropaActivaJugador.icono);
+                    tropaActivaJugador.setPosicionTablero(3);
+                    caminosCPU();
+                    break;
+                // Si está en la casilla de arriba
+                case 3:
+                    casillaSuperiorDerecha.setIcon(null);
+                    casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
+                    tropaActivaJugador.setPosicionTablero(4);
+                    caminosCPU();
+                    break;
+                // Si está en la casilla del castillo enemigo
+                case 4:
+                    casillaCastilloSuperior.setIcon(null);
+                    caminosCPU();
+                    continuarBoton.setEnabled(false);
+                    
+                    dañoCastillos();
+                    System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
+
+                    tropaActivaJugador = null;
+                    tropaActivaCPU = null;
+                    
+                    if (jugador.getCantidadTropas() > 0) {
+                        caminoDerechoSeleccion.setEnabled(true);
+                        caminoIzquierdoSeleccion.setEnabled(true);
+                    }   break;
+                default:
+                    break;
             }
-            // Si está en la casilla del medio
-            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() != null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() == null) {
-                casillaMedioDerecha.setIcon(null);
-                casillaSuperiorDerecha.setIcon(tropaActivaJugador.icono);
+        }
+    }
+    
+    // Método del Jugador para moverse por el camino derecho del tablero
+    public void caminoIzquierdo() {
+        continuarBoton.setEnabled(true);
+        caminoDerechoSeleccion.setEnabled(false);
+        caminoIzquierdoSeleccion.setEnabled(false);
+        
+        // Si no hay tropas activas en el tablero
+        if (tropaActivaJugador == null) {
+            tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
+            casillaInferiorIzquierda.setIcon(tropaActivaJugador.icono);
+            tropaActivaJugador.setPosicionTablero(-1);
+
+            jugador.tropaUtilizada();
+            tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+            
+            caminosCPU();
+
+            setTropasVisibles();
+        } 
+        // Si existe una tropa activa en el tablero
+        else if (tropaActivaJugador != null) {
+            switch (tropaActivaJugador.getPosicionTablero()) {
+                // Si está en la casilla de abajo
+                case -1:
+                    casillaInferiorIzquierda.setIcon(null);
+                    tropaActivaJugador.setPosicionTablero(-2);
+                    caminosCPU();
+                    if (tropaActivaJugador.icono != null) { 
+                        casillaMedioIzquierda.setIcon(tropaActivaJugador.icono);
+                    }
+                    break;
+                // Si está en la casilla del medio
+                case -2:
+                    casillaMedioIzquierda.setIcon(null);
+                    casillaSuperiorIzquierda.setIcon(tropaActivaJugador.icono);
+                    tropaActivaJugador.setPosicionTablero(-3);
+                    caminosCPU();
+                    break;
+                // Si está en la casilla de arriba
+                case -3:
+                    casillaSuperiorIzquierda.setIcon(null);
+                    casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
+                    tropaActivaJugador.setPosicionTablero(4);
+                    caminosCPU();
+                    break;
+                // Si está en la casilla del castillo enemigo
+                case 4:
+                    casillaCastilloSuperior.setIcon(null);
+                    caminosCPU();
+                    continuarBoton.setEnabled(false);
+                    
+                    dañoCastillos();
+                    System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
+                    
+                    tropaActivaJugador = null;
+                    tropaActivaCPU = null;
+                    
+                    if (jugador.getCantidadTropas() > 0) {
+                        caminoDerechoSeleccion.setEnabled(true);
+                        caminoIzquierdoSeleccion.setEnabled(true);
+                    }   break;
+                default:
+                    break;
             }
-            // Si está en la casilla de arriba
-            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() != null && casillaCastilloSuperior.getIcon() == null) {
-                casillaSuperiorDerecha.setIcon(null);
-                casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
-            }
-            // Si está en la casilla del castillo enemigo
-            else if (casillaInferiorDerecha.getIcon() == null && casillaMedioDerecha.getIcon() == null && casillaSuperiorDerecha.getIcon() == null && casillaCastilloSuperior.getIcon() != null) {
-                casillaCastilloSuperior.setIcon(null);
-                
-                if (jugador.getCantidadTropas() > 0) {
-                    caminoDerechoSeleccion.setEnabled(true);
-                    caminoIzquierdoSeleccion.setEnabled(true);
+        }
+    }
+    
+    // Método del CPU para moverse por el tablero
+    public void caminosCPU() {
+        try {
+            // Si no hay tropas activas en el tablero
+            if (tropaActivaCPU == null) {
+                tropaActivaCPU = colaTropasVisiblesCPU.desencolar();
+
+                // Selecciona el camino aleatoriamente
+                int camino = cpu.seleccionarCaminoTablero();
+                switch (camino) {
+                    // Camino derecho
+                    case 1:
+                        casillaSuperiorDerecha.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(3);
+                        break;
+
+                    // Camino izquierdo
+                    case 2:
+                        casillaSuperiorIzquierda.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(-3);
+                        break;
+
+                    default:
+                        throw new AssertionError();
                 }
-                
-                continuarBoton.setEnabled(false);
-                tropaActivaJugador = null;
+
+                cpu.tropaUtilizada();
+                tropasRestantesCPU.setText("Tropas restantes: " + cpu.getCantidadTropas());
             }
+
+            // Si existe una tropa activa en el tablero
+            else if (tropaActivaCPU != null) {
+                switch (tropaActivaCPU.getPosicionTablero()) {
+                // Camino Izquierdo
+                    // Si está en la casilla de arriba
+                    case -3:
+                        casillaSuperiorIzquierda.setIcon(null);
+                        tropaActivaCPU.setPosicionTablero(-2);
+                        combateTropas();
+                        casillaMedioIzquierda.setIcon(tropaActivaCPU.icono);
+                        break;
+                    // Si está en la casilla del medio
+                    case -2:
+                        casillaMedioIzquierda.setIcon(null);
+                        casillaInferiorIzquierda.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(-1);
+                        break;
+                    // Si está en la casilla de abajo
+                    case -1:
+                        casillaInferiorIzquierda.setIcon(null);
+                        casillaCastilloInferior.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(0);
+                        break;
+
+                // Camino Izquierdo
+                    // Si está en la casilla de arriba
+                    case 3:
+                        casillaSuperiorDerecha.setIcon(null);
+                        tropaActivaCPU.setPosicionTablero(2);
+                        combateTropas();
+                        casillaMedioDerecha.setIcon(tropaActivaCPU.icono);
+                        break;
+                    // Si está en la casilla del medio
+                    case 2:
+                        casillaMedioDerecha.setIcon(null);
+                        casillaInferiorDerecha.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(1);
+                        break;
+                    // Si está en la casilla de abajo
+                    case 1:
+                        casillaInferiorDerecha.setIcon(null);
+                        casillaCastilloInferior.setIcon(tropaActivaCPU.icono);
+                        tropaActivaCPU.setPosicionTablero(0);
+                        break;
+
+                // Casilla Castillo Jugador
+                    case 0:
+                        casillaCastilloInferior.setIcon(null);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (NullPointerException ex) {
+        }
+    }
+    
+    // Método para determinar la resolución de un combate
+    public void combateTropas () {
+        // Si en el tablero hay una tropa aliada y una enemiga y ambas se encuentran
+        if ((tropaActivaJugador != null && tropaActivaCPU != null) && (tropaActivaJugador.getPosicionTablero() == tropaActivaCPU.getPosicionTablero())) {
+            // Si ambas tropas son iguales
+            if (tropaActivaJugador.getTipo().equals(tropaActivaCPU.getTipo())) {
+                new MensajeCombate(tropaActivaJugador, tropaActivaCPU, null).setVisible(true);
+            }
+            // Si gana la tropa del jugador
+            else if (tropaActivaJugador.getFortaleza().equals(tropaActivaCPU.getTipo())) {
+                new MensajeCombate(tropaActivaJugador, tropaActivaCPU, tropaActivaJugador).setVisible(true);
+                tropaActivaCPU.icono = null;
+            }
+            // Si pierde la tropa del jugador
+            else if (tropaActivaJugador.getDebilidad().equals(tropaActivaCPU.getTipo())){
+                new MensajeCombate(tropaActivaJugador, tropaActivaCPU, tropaActivaCPU).setVisible(true);
+                tropaActivaJugador.icono = null;
+            }
+        }
+    }
+    
+    // Método para actualizar la barra de salud
+    public void barraSalud () {
+        // Establece el cambio en la barra
+        barraSaludJugador.setValue((int) (jugador.castillo.getPuntosVida() * 10));
+        barraSaludCPU.setValue((int) (cpu.castillo.getPuntosVida() * 10));
+        
+        // Establece el cambio en el texto
+        barraSaludJugador.setString(String.valueOf(jugador.castillo.getPuntosVida()) + " HP");
+        barraSaludCPU.setString(String.valueOf(cpu.castillo.getPuntosVida()) + " HP");
+    }
+    
+    // Método para realizar daño a los castillos
+    public void dañoCastillos () {
+        try {
+            if (tropaActivaJugador.getPosicionTablero() == 4 && tropaActivaJugador.icono != null) {
+                cpu.castillo.recibirDaño(tropaActivaJugador.getDaño());
+                barraSalud();
+            }
+
+            if (tropaActivaCPU.getPosicionTablero() == 0 && tropaActivaCPU.icono != null) {
+                jugador.castillo.recibirDaño(tropaActivaCPU.getDaño());
+                barraSalud();
+            }
+        } catch (NullPointerException ex) {
         }
     }
     
@@ -217,6 +464,8 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         continuarBoton = new javax.swing.JButton();
+        barraSaludCPU = new javax.swing.JProgressBar();
+        barraSaludJugador = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -326,12 +575,12 @@ public class TableroBatalla extends javax.swing.JFrame {
         tropaJugador3.setBackground(new java.awt.Color(204, 204, 204));
         tropaJugador3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tropaJugador3.setOpaque(true);
-        jPanel1.add(tropaJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 650, 50, 50));
+        jPanel1.add(tropaJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 650, 50, 50));
 
         tropaJugador1.setBackground(new java.awt.Color(204, 204, 204));
         tropaJugador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tropaJugador1.setOpaque(true);
-        jPanel1.add(tropaJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 650, 50, 50));
+        jPanel1.add(tropaJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 650, 50, 50));
 
         tropaJugador2.setBackground(new java.awt.Color(204, 204, 204));
         tropaJugador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -341,7 +590,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         tropaRival1.setBackground(new java.awt.Color(204, 204, 204));
         tropaRival1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tropaRival1.setOpaque(true);
-        jPanel1.add(tropaRival1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 50, 50));
+        jPanel1.add(tropaRival1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 50, 50));
 
         tropaRival2.setBackground(new java.awt.Color(204, 204, 204));
         tropaRival2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -351,7 +600,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         tropaRival3.setBackground(new java.awt.Color(204, 204, 204));
         tropaRival3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tropaRival3.setOpaque(true);
-        jPanel1.add(tropaRival3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 50, 50));
+        jPanel1.add(tropaRival3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 50, 50));
 
         tropasRestantesCPU.setBackground(new java.awt.Color(221, 221, 221));
         tropasRestantesCPU.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -368,8 +617,8 @@ public class TableroBatalla extends javax.swing.JFrame {
         jPanel1.add(tropasRestantesJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 680, -1, -1));
         jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 610, 20));
 
-        caminoIzquierdoSeleccion.setBackground(new java.awt.Color(255, 255, 255));
-        caminoIzquierdoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba.png"))); // NOI18N
+        caminoIzquierdoSeleccion.setBackground(new java.awt.Color(0, 102, 255));
+        caminoIzquierdoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba-blanco.png"))); // NOI18N
         caminoIzquierdoSeleccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 caminoIzquierdoSeleccionActionPerformed(evt);
@@ -377,8 +626,8 @@ public class TableroBatalla extends javax.swing.JFrame {
         });
         jPanel1.add(caminoIzquierdoSeleccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 550, 50, 50));
 
-        caminoDerechoSeleccion.setBackground(new java.awt.Color(255, 255, 255));
-        caminoDerechoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba.png"))); // NOI18N
+        caminoDerechoSeleccion.setBackground(new java.awt.Color(0, 102, 255));
+        caminoDerechoSeleccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arriba-blanco.png"))); // NOI18N
         caminoDerechoSeleccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 caminoDerechoSeleccionActionPerformed(evt);
@@ -390,13 +639,13 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(221,221,221));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("3");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 50, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 50, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(221,221,221));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("1");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 50, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 50, -1));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(221,221,221));
@@ -408,7 +657,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel15.setForeground(new java.awt.Color(221,221,221));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setText("3");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 620, 50, -1));
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 620, 50, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(221,221,221));
@@ -420,12 +669,13 @@ public class TableroBatalla extends javax.swing.JFrame {
         jLabel17.setForeground(new java.awt.Color(221,221,221));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("1");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 620, 50, -1));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 620, 50, -1));
 
         continuarBoton.setBackground(new java.awt.Color(0, 102, 255));
         continuarBoton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         continuarBoton.setForeground(new java.awt.Color(255, 255, 255));
         continuarBoton.setText("Continuar");
+        continuarBoton.setFocusPainted(false);
         continuarBoton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         continuarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -433,6 +683,28 @@ public class TableroBatalla extends javax.swing.JFrame {
             }
         });
         jPanel1.add(continuarBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 680, 110, -1));
+
+        barraSaludCPU.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        barraSaludCPU.setForeground(new java.awt.Color(255, 255, 255));
+        barraSaludCPU.setValue(50);
+        barraSaludCPU.setBorder(null);
+        barraSaludCPU.setBorderPainted(false);
+        barraSaludCPU.setFocusable(false);
+        barraSaludCPU.setRequestFocusEnabled(false);
+        barraSaludCPU.setString("5.0 HP");
+        barraSaludCPU.setStringPainted(true);
+        jPanel1.add(barraSaludCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 50, 120, 20));
+
+        barraSaludJugador.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        barraSaludJugador.setForeground(new java.awt.Color(255, 255, 255));
+        barraSaludJugador.setValue(50);
+        barraSaludJugador.setBorder(null);
+        barraSaludJugador.setBorderPainted(false);
+        barraSaludJugador.setFocusable(false);
+        barraSaludJugador.setRequestFocusEnabled(false);
+        barraSaludJugador.setString("5.0 HP");
+        barraSaludJugador.setStringPainted(true);
+        jPanel1.add(barraSaludJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 650, 120, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -448,8 +720,9 @@ public class TableroBatalla extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Camino Izquierdo
     private void caminoIzquierdoSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminoIzquierdoSeleccionActionPerformed
-        // TODO add your handling code here:
+        caminoIzquierdo();
     }//GEN-LAST:event_caminoIzquierdoSeleccionActionPerformed
 
     // Camino Derecho
@@ -459,7 +732,28 @@ public class TableroBatalla extends javax.swing.JFrame {
 
     // Botón Continuar
     private void continuarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continuarBotonActionPerformed
-        caminoDerecho();
+        switch (tropaActivaJugador.getPosicionTablero()) {
+            // En caso de que vaya por la izquierda
+            case -1:
+            case -2:
+            case -3:
+                caminoIzquierdo();
+                break;
+                
+            // En caso de que vaya por la derecha
+            case 1:
+            case 2:
+            case 3:
+                caminoDerecho();
+                break;
+                
+            // En caso de que llegue al castillo enemigo (izq. o der. sirven)
+            case 4:
+                caminoDerecho();
+                break;
+            default:
+                break;
+        }
     }//GEN-LAST:event_continuarBotonActionPerformed
 
 
@@ -496,6 +790,8 @@ public class TableroBatalla extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barraSaludCPU;
+    private javax.swing.JProgressBar barraSaludJugador;
     private javax.swing.JButton caminoDerechoSeleccion;
     private javax.swing.JButton caminoIzquierdoSeleccion;
     private javax.swing.JLabel casillaCastilloInferior;

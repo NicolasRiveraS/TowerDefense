@@ -2,19 +2,19 @@ package TowerDefense;
 
 class Castillo {
     // Atributos
-    private int puntosVida;
+    private double puntosVida;
 
     // Constructor
     public Castillo() {
-        this.puntosVida = 10;
+        this.puntosVida = 10.0;
     }
 
     // Métodos
-    public void recibirDaño(int cantidad) {
+    public void recibirDaño(double cantidad) {
         this.puntosVida -= cantidad;
     }
 
-    public int getPuntosVida() {
+    public double getPuntosVida() {
         return puntosVida;
     }
 }

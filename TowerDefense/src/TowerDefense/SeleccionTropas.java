@@ -1,6 +1,6 @@
 package TowerDefense;
 
-import java.awt.*;
+import javax.swing.*;
 
 public class SeleccionTropas extends javax.swing.JFrame {
 
@@ -20,6 +20,17 @@ public class SeleccionTropas extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Selección de Tropas");
+        
+        // Obliga a que el usuario pueda cambiar los valores de los spinner únicamente mediante las flechas 
+        // Inhabilita la edición del texto
+        ((JSpinner.DefaultEditor) Spinner1.getEditor()).getTextField().setEditable(false);
+        ((JSpinner.DefaultEditor) Spinner2.getEditor()).getTextField().setEditable(false);
+        ((JSpinner.DefaultEditor) Spinner3.getEditor()).getTextField().setEditable(false);
+        // Inhabilita que el cursor de texto se posicione sobre los valores
+        ((JSpinner.DefaultEditor) Spinner1.getEditor()).getTextField().setFocusable(false);
+        ((JSpinner.DefaultEditor) Spinner2.getEditor()).getTextField().setFocusable(false);
+        ((JSpinner.DefaultEditor) Spinner3.getEditor()).getTextField().setFocusable(false);
+        
         jLabel1.setForeground(new java.awt.Color(139, 69, 19)); //café claro
         jPanel1.setBackground(new java.awt.Color(222, 184, 135)); //café madera
         jLabel2.setForeground(new java.awt.Color(210, 105, 30)); //chocolate???

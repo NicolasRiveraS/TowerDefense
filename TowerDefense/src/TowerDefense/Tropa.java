@@ -10,6 +10,21 @@ public abstract class Tropa {
     protected String fortaleza;
     protected String debilidad;
     protected Icon icono;
+    
+    // Atributo implementado para conocer la posición de la tropa en el tablero
+    protected int posicionTablero;
+    /* Interpretación:
+    
+       Caminos Tablero
+     Izq             Der
+    
+            | 4 |
+    | -3 |          | 3 |
+    | -2 |          | 2 |
+    | -1 |          | 1 |
+            | 0 |
+    
+    */
 
     // Constructor
     public Tropa(String tipo, int vida, double daño, String fortaleza, String debilidad) {
@@ -40,6 +55,14 @@ public abstract class Tropa {
         return debilidad;
     }
 
+    public int getPosicionTablero() {
+        return posicionTablero;
+    }
+
+    public void setPosicionTablero(int posicionTablero) {
+        this.posicionTablero = posicionTablero;
+    }
+    
     public abstract void atacar(Castillo castilloEnemigo);
 
     @Override
