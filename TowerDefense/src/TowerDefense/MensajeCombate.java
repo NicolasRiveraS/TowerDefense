@@ -45,7 +45,7 @@ public class MensajeCombate extends javax.swing.JFrame {
             // Asigna los íconos
             iconTropaJugador.setIcon(tropaJugador.icono);
             iconTropaCPU.setIcon(tropaCPU.icono);
-            // Indica que ambas tropas sobreviven
+            // Indica que el jugador gana
             ganadorJugador.setText("¡Ganador!");
             ganadorCPU.setText("");
             // Pinta el recuadro ganador
@@ -60,7 +60,7 @@ public class MensajeCombate extends javax.swing.JFrame {
             // Asigna los íconos
             iconTropaJugador.setIcon(tropaJugador.icono);
             iconTropaCPU.setIcon(tropaCPU.icono);
-            // Indica que ambas tropas sobreviven
+            // Indica que el cpu gana
             ganadorJugador.setText("");
             ganadorCPU.setText("¡Ganador!");
             // Pinta el recuadro ganador

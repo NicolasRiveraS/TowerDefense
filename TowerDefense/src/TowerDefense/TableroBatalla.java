@@ -1,7 +1,5 @@
 package TowerDefense;
 
-import javax.swing.*;
-
 public class TableroBatalla extends javax.swing.JFrame {
     // Atributos
     private static int rival;
@@ -217,7 +215,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         }
     }
     
-    // Método del Jugador para moverse por el camino derecho del tablero
+    // Método del Jugador para moverse por el camino izquierdo del tablero
     public void caminoIzquierdo() {
         continuarBoton.setEnabled(true);
         caminoDerechoSeleccion.setEnabled(false);
@@ -418,6 +416,21 @@ public class TableroBatalla extends javax.swing.JFrame {
         } catch (NullPointerException ex) {
         }
     }
+    
+    // Getters para obtener el resultado de la ronda
+    public int getRival() {
+        return this.rival;
+    }
+    public Jugador getJugador() {
+        return this.jugador;
+    }
+    public CPU getCpu() {
+        return this.cpu;
+    }
+    public int getNumeroRonda() {
+        return this.numeroRonda;
+    }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -7,6 +7,7 @@ package TowerDefense;
 public class MainJuego {
 
     public static void main(String[] args) {
+        // Inicializa el número de rival
         int rival = 1;
         
         // Crea la interfaz del menú principal y la hace visible con el aspecto establecido
@@ -30,6 +31,7 @@ public class MainJuego {
             // Crea un nuevo oponente CPU
             CPU cpu = new CPU();
             
+            // Se inicializa el número de ronda
             int numeroRonda = 5; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Ciclo de Rondas por Rival
