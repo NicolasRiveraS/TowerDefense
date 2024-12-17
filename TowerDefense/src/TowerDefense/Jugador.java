@@ -12,16 +12,6 @@ class Jugador {
         this.colaTropas = new ColaTropas();
     }
 
-    // Método para atacar al CPU
-//    public void atacar(CPU cpu) {
-//        // Procesar el ataque de las tropas del jugador al castillo del CPU
-//        while (!listaTropas.estaVacia()) {
-//            Tropa tropa = listaTropas.desencolar();
-//            System.out.println("Tropa " + tropa.getTipo() + " ataca al castillo del CPU.");
-//            cpu.getCastillo().recibirDaño((int) tropa.getDaño());
-//        }
-//    }
-
     // Método para seleccionar tropas
     public void seleccionTropas(int numeroRonda) {
         SeleccionTropas seleccionTropas = new SeleccionTropas(numeroRonda);
@@ -41,20 +31,23 @@ class Jugador {
         int magos = seleccionTropas.getCantidadMagos();
 
         for (int i = 0; i < arqueros; i++) {
-            colaTropas.encolar(new Arquero());
+            Arquero a = new Arquero();
+            a.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arquero_aliado.png")));
+            colaTropas.encolar(a);
             cantidadTropas++;
         }
         for (int i = 0; i < caballeros; i++) {
-            colaTropas.encolar(new Caballero());
+            Caballero c = new Caballero();
+            c.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/caballero_aliado.png")));
+            colaTropas.encolar(c);
             cantidadTropas++;
         }
         for (int i = 0; i < magos; i++) {
-            colaTropas.encolar(new Mago());
+            Mago m = new Mago();
+            m.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/mago_aliado.png")));
+            colaTropas.encolar(m);
             cantidadTropas++;
         }
-
-        System.out.println("Tropas seleccionadas y agregadas a la cola:");
-        System.out.println(colaTropas);
     }
 
     // Método para obtener el castillo del jugador

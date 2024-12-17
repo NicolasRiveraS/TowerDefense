@@ -9,7 +9,8 @@ public abstract class Tropa {
     protected double daño;
     protected String fortaleza;
     protected String debilidad;
-    protected Icon icono;
+    protected Icon iconoDesplegado;
+    protected Icon iconoDisponible;
     
     // Atributo implementado para conocer la posición de la tropa en el tablero
     protected int posicionTablero;
@@ -62,14 +63,14 @@ public abstract class Tropa {
     public void setPosicionTablero(int posicionTablero) {
         this.posicionTablero = posicionTablero;
     }
-    
-    public abstract void atacar(Castillo castilloEnemigo);
+
+    public void setIconoDesplegado(Icon iconoDesplegado) {
+        this.iconoDesplegado = iconoDesplegado;
+    }
 
     @Override
     public String toString() {
         return "Tropa{" + "tipo=" + tipo + ", punstosVida=" + puntosVida + ", daño=" + daño + ", fortaleza=" + fortaleza + ", debilidad=" + debilidad + '}';
     }
-    
-    
 }
 

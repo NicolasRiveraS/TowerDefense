@@ -20,13 +20,19 @@ class CPU extends Jugador {
         
         switch (seleccion) {
             case 1:
-                return new Arquero();
+                Arquero a = new Arquero();
+                a.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/arquero_enemigo.png")));
+                return a;
                 
             case 2:
-                return new Caballero();
+                Caballero c = new Caballero();
+                c.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/caballero_enemigo.png")));
+                return c;
                 
             case 3:
-                return new Mago();
+                Mago m = new Mago();
+                m.setIconoDesplegado(new javax.swing.ImageIcon(getClass().getResource("/Iconos/mago_enemigo.png")));
+                return m;
                 
             default:
                 throw new AssertionError();

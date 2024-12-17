@@ -17,12 +17,12 @@ public class Batalla {
 
     // Métodos
     
-    // Inicio de la batalla
+    // Inicio de la batalla (rondas)
     public void iniciarBatalla () {
         TableroBatalla t = new TableroBatalla(rival, jugador, cpu, numeroRonda);
         t.setVisible(true);
         
-        while (t.isEnabled()) {
+        while (t.isVisible()) {
             try {
                 Thread.sleep(100); // Pequeña pausa para no saturar el hilo principal
             } 
@@ -30,6 +30,25 @@ public class Batalla {
             }
         }
         
-        
+        this.rival = t.getRival();
+        this.jugador = t.getJugador();
+        this.cpu = t.getCpu();
+        this.numeroRonda = t.getNumeroRonda();
+    
+        t.dispose();
+    }
+    
+    // Getters para obtener el resultado de la ronda
+    public int getRival() {
+        return this.rival;
+    }
+    public Jugador getJugador() {
+        return this.jugador;
+    }
+    public CPU getCpu() {
+        return this.cpu;
+    }
+    public int getNumeroRonda() {
+        return this.numeroRonda;
     }
 }

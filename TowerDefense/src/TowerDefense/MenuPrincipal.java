@@ -34,7 +34,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(642, 518));
-        setPreferredSize(new java.awt.Dimension(642, 518));
         setResizable(false);
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N

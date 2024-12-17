@@ -28,8 +28,8 @@ public class MensajeCombate extends javax.swing.JFrame {
             textTropaCPU.setText(tropaCPU.tipo);
             textTropaCPU.setForeground(new java.awt.Color(0, 0, 0));
             // Asigna los íconos
-            iconTropaJugador.setIcon(tropaJugador.icono);
-            iconTropaCPU.setIcon(tropaCPU.icono);
+            iconTropaJugador.setIcon(tropaJugador.iconoDesplegado);
+            iconTropaCPU.setIcon(tropaCPU.iconoDesplegado);
             // Indica que ambas tropas sobreviven
             ganadorJugador.setText("¡Empate!");
             ganadorCPU.setText("¡Empate!");
@@ -43,8 +43,8 @@ public class MensajeCombate extends javax.swing.JFrame {
             textTropaJugador.setText(tropaJugador.tipo);
             textTropaCPU.setText(tropaCPU.tipo);
             // Asigna los íconos
-            iconTropaJugador.setIcon(tropaJugador.icono);
-            iconTropaCPU.setIcon(tropaCPU.icono);
+            iconTropaJugador.setIcon(tropaJugador.iconoDesplegado);
+            iconTropaCPU.setIcon(tropaCPU.iconoDesplegado);
             // Indica que el jugador gana
             ganadorJugador.setText("¡Ganador!");
             ganadorCPU.setText("");
@@ -58,8 +58,8 @@ public class MensajeCombate extends javax.swing.JFrame {
             textTropaJugador.setText(tropaJugador.tipo);
             textTropaCPU.setText(tropaCPU.tipo);
             // Asigna los íconos
-            iconTropaJugador.setIcon(tropaJugador.icono);
-            iconTropaCPU.setIcon(tropaCPU.icono);
+            iconTropaJugador.setIcon(tropaJugador.iconoDesplegado);
+            iconTropaCPU.setIcon(tropaCPU.iconoDesplegado);
             // Indica que el cpu gana
             ganadorJugador.setText("");
             ganadorCPU.setText("¡Ganador!");

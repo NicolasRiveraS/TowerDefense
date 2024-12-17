@@ -67,13 +67,13 @@ public class TableroBatalla extends javax.swing.JFrame {
             for (int i = 0; i < jugador.getCantidadTropas(); i++) {
                 if (tropaJugador1.getIcon() == null) {
                     colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
-                    tropaJugador1.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                    tropaJugador1.setIcon(colaTropasVisiblesJugador.mostrar(i).iconoDisponible);
                 } else if (tropaJugador2.getIcon() == null) {
                     colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
-                    tropaJugador2.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                    tropaJugador2.setIcon(colaTropasVisiblesJugador.mostrar(i).iconoDisponible);
                 } else if (tropaJugador3.getIcon() == null) {
                     colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
-                    tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(i).icono);
+                    tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(i).iconoDisponible);
                 } else {
                     break;
                 }
@@ -83,13 +83,13 @@ public class TableroBatalla extends javax.swing.JFrame {
             for (int i = 0; i < cpu.getCantidadTropas(); i++) {
                 if (tropaRival1.getIcon() == null) {
                     colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
-                    tropaRival1.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                    tropaRival1.setIcon(colaTropasVisiblesCPU.mostrar(i).iconoDisponible);
                 } else if (tropaRival2.getIcon() == null) {
                     colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
-                    tropaRival2.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                    tropaRival2.setIcon(colaTropasVisiblesCPU.mostrar(i).iconoDisponible);
                 } else if (tropaRival3.getIcon() == null) {
                     colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
-                    tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(i).icono);
+                    tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(i).iconoDisponible);
                 } else {
                     break;
                 }
@@ -105,7 +105,7 @@ public class TableroBatalla extends javax.swing.JFrame {
                 colaTropasVisiblesJugador.encolar(jugador.colaTropas.desencolar());
                 tropaJugador1.setIcon(tropaJugador2.getIcon());
                 tropaJugador2.setIcon(tropaJugador3.getIcon());
-                tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(2).icono);
+                tropaJugador3.setIcon(colaTropasVisiblesJugador.mostrar(2).iconoDisponible);
             }
             else if (jugador.getCantidadTropas() == 2) {
                 tropaJugador1.setIcon(tropaJugador2.getIcon());
@@ -128,7 +128,7 @@ public class TableroBatalla extends javax.swing.JFrame {
                 colaTropasVisiblesCPU.encolar(cpu.colaTropas.desencolar());
                 tropaRival1.setIcon(tropaRival2.getIcon());
                 tropaRival2.setIcon(tropaRival3.getIcon());
-                tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(2).icono);
+                tropaRival3.setIcon(colaTropasVisiblesCPU.mostrar(2).iconoDisponible);
             }
             else if (cpu.getCantidadTropas() == 2) {
                 tropaRival1.setIcon(tropaRival2.getIcon());
@@ -157,7 +157,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         // Si no hay tropas activas en el tablero
         if (tropaActivaJugador == null) {
             tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
-            casillaInferiorDerecha.setIcon(tropaActivaJugador.icono);
+            casillaInferiorDerecha.setIcon(tropaActivaJugador.iconoDesplegado);
             tropaActivaJugador.setPosicionTablero(1);
 
             jugador.tropaUtilizada();
@@ -175,21 +175,21 @@ public class TableroBatalla extends javax.swing.JFrame {
                     casillaInferiorDerecha.setIcon(null);
                     tropaActivaJugador.setPosicionTablero(2);
                     caminosCPU();
-                    if (tropaActivaJugador.icono != null) {
-                        casillaMedioDerecha.setIcon(tropaActivaJugador.icono);
+                    if (tropaActivaJugador.iconoDesplegado != null) {
+                        casillaMedioDerecha.setIcon(tropaActivaJugador.iconoDesplegado);
                     }
                     break;
                 // Si está en la casilla del medio
                 case 2:
                     casillaMedioDerecha.setIcon(null);
-                    casillaSuperiorDerecha.setIcon(tropaActivaJugador.icono);
+                    casillaSuperiorDerecha.setIcon(tropaActivaJugador.iconoDesplegado);
                     tropaActivaJugador.setPosicionTablero(3);
                     caminosCPU();
                     break;
                 // Si está en la casilla de arriba
                 case 3:
                     casillaSuperiorDerecha.setIcon(null);
-                    casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
+                    casillaCastilloSuperior.setIcon(tropaActivaJugador.iconoDesplegado);
                     tropaActivaJugador.setPosicionTablero(4);
                     caminosCPU();
                     break;
@@ -200,6 +200,11 @@ public class TableroBatalla extends javax.swing.JFrame {
                     continuarBoton.setEnabled(false);
                     
                     dañoCastillos();
+                    
+                    if (jugador.getCastillo().getPuntosVida() <= 0 || cpu.getCastillo().getPuntosVida() <= 0) {
+                        this.setVisible(false);
+                    }
+                    
                     System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
 
                     tropaActivaJugador = null;
@@ -208,7 +213,12 @@ public class TableroBatalla extends javax.swing.JFrame {
                     if (jugador.getCantidadTropas() > 0) {
                         caminoDerechoSeleccion.setEnabled(true);
                         caminoIzquierdoSeleccion.setEnabled(true);
-                    }   break;
+                    }
+                    else {
+                        this.setVisible(false);
+                    }
+                    
+                    break;
                 default:
                     break;
             }
@@ -224,7 +234,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         // Si no hay tropas activas en el tablero
         if (tropaActivaJugador == null) {
             tropaActivaJugador = colaTropasVisiblesJugador.desencolar();
-            casillaInferiorIzquierda.setIcon(tropaActivaJugador.icono);
+            casillaInferiorIzquierda.setIcon(tropaActivaJugador.iconoDesplegado);
             tropaActivaJugador.setPosicionTablero(-1);
 
             jugador.tropaUtilizada();
@@ -242,21 +252,21 @@ public class TableroBatalla extends javax.swing.JFrame {
                     casillaInferiorIzquierda.setIcon(null);
                     tropaActivaJugador.setPosicionTablero(-2);
                     caminosCPU();
-                    if (tropaActivaJugador.icono != null) { 
-                        casillaMedioIzquierda.setIcon(tropaActivaJugador.icono);
+                    if (tropaActivaJugador.iconoDesplegado != null) { 
+                        casillaMedioIzquierda.setIcon(tropaActivaJugador.iconoDesplegado);
                     }
                     break;
                 // Si está en la casilla del medio
                 case -2:
                     casillaMedioIzquierda.setIcon(null);
-                    casillaSuperiorIzquierda.setIcon(tropaActivaJugador.icono);
+                    casillaSuperiorIzquierda.setIcon(tropaActivaJugador.iconoDesplegado);
                     tropaActivaJugador.setPosicionTablero(-3);
                     caminosCPU();
                     break;
                 // Si está en la casilla de arriba
                 case -3:
                     casillaSuperiorIzquierda.setIcon(null);
-                    casillaCastilloSuperior.setIcon(tropaActivaJugador.icono);
+                    casillaCastilloSuperior.setIcon(tropaActivaJugador.iconoDesplegado);
                     tropaActivaJugador.setPosicionTablero(4);
                     caminosCPU();
                     break;
@@ -267,6 +277,11 @@ public class TableroBatalla extends javax.swing.JFrame {
                     continuarBoton.setEnabled(false);
                     
                     dañoCastillos();
+                    
+                    if (jugador.getCastillo().getPuntosVida() <= 0 || cpu.getCastillo().getPuntosVida() <= 0) {
+                        this.setVisible(false);
+                    }
+                    
                     System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
                     
                     tropaActivaJugador = null;
@@ -275,7 +290,12 @@ public class TableroBatalla extends javax.swing.JFrame {
                     if (jugador.getCantidadTropas() > 0) {
                         caminoDerechoSeleccion.setEnabled(true);
                         caminoIzquierdoSeleccion.setEnabled(true);
-                    }   break;
+                    }
+                    else {
+                        this.setVisible(false);
+                    }
+                    
+                    break;
                 default:
                     break;
             }
@@ -294,13 +314,13 @@ public class TableroBatalla extends javax.swing.JFrame {
                 switch (camino) {
                     // Camino derecho
                     case 1:
-                        casillaSuperiorDerecha.setIcon(tropaActivaCPU.icono);
+                        casillaSuperiorDerecha.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(3);
                         break;
 
                     // Camino izquierdo
                     case 2:
-                        casillaSuperiorIzquierda.setIcon(tropaActivaCPU.icono);
+                        casillaSuperiorIzquierda.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(-3);
                         break;
 
@@ -321,18 +341,18 @@ public class TableroBatalla extends javax.swing.JFrame {
                         casillaSuperiorIzquierda.setIcon(null);
                         tropaActivaCPU.setPosicionTablero(-2);
                         combateTropas();
-                        casillaMedioIzquierda.setIcon(tropaActivaCPU.icono);
+                        casillaMedioIzquierda.setIcon(tropaActivaCPU.iconoDesplegado);
                         break;
                     // Si está en la casilla del medio
                     case -2:
                         casillaMedioIzquierda.setIcon(null);
-                        casillaInferiorIzquierda.setIcon(tropaActivaCPU.icono);
+                        casillaInferiorIzquierda.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(-1);
                         break;
                     // Si está en la casilla de abajo
                     case -1:
                         casillaInferiorIzquierda.setIcon(null);
-                        casillaCastilloInferior.setIcon(tropaActivaCPU.icono);
+                        casillaCastilloInferior.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(0);
                         break;
 
@@ -342,18 +362,18 @@ public class TableroBatalla extends javax.swing.JFrame {
                         casillaSuperiorDerecha.setIcon(null);
                         tropaActivaCPU.setPosicionTablero(2);
                         combateTropas();
-                        casillaMedioDerecha.setIcon(tropaActivaCPU.icono);
+                        casillaMedioDerecha.setIcon(tropaActivaCPU.iconoDesplegado);
                         break;
                     // Si está en la casilla del medio
                     case 2:
                         casillaMedioDerecha.setIcon(null);
-                        casillaInferiorDerecha.setIcon(tropaActivaCPU.icono);
+                        casillaInferiorDerecha.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(1);
                         break;
                     // Si está en la casilla de abajo
                     case 1:
                         casillaInferiorDerecha.setIcon(null);
-                        casillaCastilloInferior.setIcon(tropaActivaCPU.icono);
+                        casillaCastilloInferior.setIcon(tropaActivaCPU.iconoDesplegado);
                         tropaActivaCPU.setPosicionTablero(0);
                         break;
 
@@ -380,12 +400,12 @@ public class TableroBatalla extends javax.swing.JFrame {
             // Si gana la tropa del jugador
             else if (tropaActivaJugador.getFortaleza().equals(tropaActivaCPU.getTipo())) {
                 new MensajeCombate(tropaActivaJugador, tropaActivaCPU, tropaActivaJugador).setVisible(true);
-                tropaActivaCPU.icono = null;
+                tropaActivaCPU.iconoDesplegado = null;
             }
             // Si pierde la tropa del jugador
             else if (tropaActivaJugador.getDebilidad().equals(tropaActivaCPU.getTipo())){
                 new MensajeCombate(tropaActivaJugador, tropaActivaCPU, tropaActivaCPU).setVisible(true);
-                tropaActivaJugador.icono = null;
+                tropaActivaJugador.iconoDesplegado = null;
             }
         }
     }
@@ -404,16 +424,17 @@ public class TableroBatalla extends javax.swing.JFrame {
     // Método para realizar daño a los castillos
     public void dañoCastillos () {
         try {
-            if (tropaActivaJugador.getPosicionTablero() == 4 && tropaActivaJugador.icono != null) {
+            if (tropaActivaJugador.getPosicionTablero() == 4 && tropaActivaJugador.iconoDesplegado != null) {
                 cpu.castillo.recibirDaño(tropaActivaJugador.getDaño());
                 barraSalud();
             }
 
-            if (tropaActivaCPU.getPosicionTablero() == 0 && tropaActivaCPU.icono != null) {
+            if (tropaActivaCPU.getPosicionTablero() == 0 && tropaActivaCPU.iconoDesplegado != null) {
                 jugador.castillo.recibirDaño(tropaActivaCPU.getDaño());
                 barraSalud();
             }
-        } catch (NullPointerException ex) {
+        } 
+        catch (NullPointerException ex) {
         }
     }
     
@@ -430,7 +451,6 @@ public class TableroBatalla extends javax.swing.JFrame {
     public int getNumeroRonda() {
         return this.numeroRonda;
     }
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
