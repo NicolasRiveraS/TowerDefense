@@ -2,10 +2,10 @@ package TowerDefense;
 
 public class RivalPorCombatir extends javax.swing.JFrame {
     // Atributos
-    private static int rival;
+    private static String rival;
     
     // Contructor
-    public RivalPorCombatir(int rival) {
+    public RivalPorCombatir(String rival) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -16,7 +16,7 @@ public class RivalPorCombatir extends javax.swing.JFrame {
 
     // Métodos
     public void setTextos () {
-        textoRival.setText("Rival " + rival);
+        textoRival.setText(rival);
     }
     
     @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ public class RivalPorCombatir extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

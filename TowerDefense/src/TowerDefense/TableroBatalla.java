@@ -205,8 +205,6 @@ public class TableroBatalla extends javax.swing.JFrame {
                         this.setVisible(false);
                     }
                     
-                    System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
-
                     tropaActivaJugador = null;
                     tropaActivaCPU = null;
                     
@@ -281,9 +279,7 @@ public class TableroBatalla extends javax.swing.JFrame {
                     if (jugador.getCastillo().getPuntosVida() <= 0 || cpu.getCastillo().getPuntosVida() <= 0) {
                         this.setVisible(false);
                     }
-                    
-                    System.out.println("Jugador: " + jugador.castillo.getPuntosVida() + "\nCPU: " + cpu.castillo.getPuntosVida() + "\n");
-                    
+                                       
                     tropaActivaJugador = null;
                     tropaActivaCPU = null;
                     
@@ -500,7 +496,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         barraSaludCPU = new javax.swing.JProgressBar();
         barraSaludJugador = new javax.swing.JProgressBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(73, 142, 69));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

@@ -2,13 +2,13 @@ package TowerDefense;
 
 public class ResultadoRival extends javax.swing.JFrame {
     // Atributos
-    private static int rival;
+    private static String rival;
     private static Jugador jugador;
     private static CPU cpu;
     private static int numeroRonda;
     
     // Constructor
-    public ResultadoRival(int rival, Jugador jugador, CPU cpu, int numeroRonda) {
+    public ResultadoRival(String rival, Jugador jugador, CPU cpu, int numeroRonda) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -26,13 +26,13 @@ public class ResultadoRival extends javax.swing.JFrame {
         if (jugador.getCastillo().getPuntosVida() <= 0) {
             resultadoPrincipal.setText("¡Derrota!");
             resultadoPrincipal.setForeground(new java.awt.Color(255, 0, 0));
-            textoRival.setText("¡Has sido derrotado por el Rival " + rival + "!");
+            textoRival.setText("¡Has sido derrotado por " + rival + "!");
         }
         // Jugador Gana
         else if (cpu.getCastillo().getPuntosVida() <= 0) {
             resultadoPrincipal.setText("¡Victoria!");
             resultadoPrincipal.setForeground(new java.awt.Color(0, 153, 0));
-            textoRival.setText("¡Has vencido al Rival " + rival + "!");
+            textoRival.setText("¡Has vencido a " + rival + "!");
         }
         textoRondas.setText("Rondas: " + numeroRonda);
     }
@@ -51,7 +51,7 @@ public class ResultadoRival extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
