@@ -11,9 +11,10 @@ public class TableroBatalla extends javax.swing.JFrame {
     private ColaTropas colaTropasVisiblesCPU;      // Cola en la cual se almacenan únicamente las tropas del CPU visibles en el tablero
     private Tropa tropaActivaJugador;
     private Tropa tropaActivaCPU;
+    private static String nombRival;
     
     // Constructor
-    public TableroBatalla(int rival, Jugador jugador, CPU cpu, int numeroRonda) {
+    public TableroBatalla(int rival, Jugador jugador, CPU cpu, int numeroRonda, String nomRival) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -22,6 +23,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         this.jugador = jugador;
         this.cpu = cpu;
         this.numeroRonda = numeroRonda;
+        this.nombRival = nomRival;
         this.auxTropasVisibles = true;
         this.colaTropasVisiblesJugador = new ColaTropas();
         this.colaTropasVisiblesCPU = new ColaTropas();
@@ -29,6 +31,8 @@ public class TableroBatalla extends javax.swing.JFrame {
         ronda.setText("RONDA " + this.numeroRonda);
         tropasRestantesCPU.setText("Tropas restantes: " + cpu.getCantidadTropas());
         tropasRestantesJugador.setText("Tropas restantes: " + jugador.getCantidadTropas());
+        nombreJugador.setText(MainJuego.nombre);
+        nombreRival.setText(nombRival);
         setImagenCastillo();
         barraSalud();
         setTropasVisibles();
@@ -453,6 +457,8 @@ public class TableroBatalla extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        nombreRival = new javax.swing.JLabel();
+        nombreJugador = new javax.swing.JLabel();
         casillaCastilloSuperior = new javax.swing.JLabel();
         casillaCastilloInferior = new javax.swing.JLabel();
         casillaSuperiorIzquierda = new javax.swing.JLabel();
@@ -500,6 +506,18 @@ public class TableroBatalla extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(73, 142, 69));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        nombreRival.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nombreRival.setForeground(new java.awt.Color(164, 229, 160));
+        nombreRival.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreRival.setText("Nombre");
+        jPanel1.add(nombreRival, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 250, 80));
+
+        nombreJugador.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nombreJugador.setForeground(new java.awt.Color(164, 229, 160));
+        nombreJugador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreJugador.setText("Nombre");
+        jPanel1.add(nombreJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, 250, 80));
 
         casillaCastilloSuperior.setBackground(new java.awt.Color(198, 173, 125));
         casillaCastilloSuperior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -813,7 +831,7 @@ public class TableroBatalla extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TableroBatalla(rival, jugador, cpu, numeroRonda).setVisible(true);
+                new TableroBatalla(rival, jugador, cpu, numeroRonda, nombRival).setVisible(true);
             }
         });
     }
@@ -850,6 +868,8 @@ public class TableroBatalla extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel nombreJugador;
+    private javax.swing.JLabel nombreRival;
     private javax.swing.JLabel puenteDerecho;
     private javax.swing.JLabel puenteIzquierdo;
     private javax.swing.JLabel rio;

@@ -1,8 +1,40 @@
 package TowerDefense;
 
 public class MainJuego {
-
+    // Atributos Generales
+    public static String nombre;
+    
+    // Main
     public static void main(String[] args) {
+        // Crea la interfaz del menú principal y la hace visible con el aspecto establecido
+        MenuPrincipal.main(args);
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setVisible(true);
+        
+        // Mientras se esté en el menú principal, permance en el ciclo
+        while (menu.isEnabled()) {                                              
+            try {
+                Thread.sleep(100); // Pequeña pausa para no saturar el hilo principal
+            } 
+            catch (InterruptedException e) {
+            }
+        }
+
+        // Se solicita el nombre del jugador
+        NombreJugador n = new NombreJugador();
+        n.setVisible(true);
+        
+        while (n.isVisible()) {            
+            try {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e) {
+            }
+        }
+        
+        MainJuego.nombre = n.getNombre();
+        n.dispose();
+        
         // Inicializa el número de rival (variable contadora) y la posición del primer rival
         int numRival = 1;
         int posicionRival;
@@ -29,26 +61,12 @@ public class MainJuego {
         a.inserta(new Rival("", 6));
         a.inserta(new Rival("", 10));
         a.inserta(new Rival("", 14));
-        a.inserta(new Rival ("Jugador (Tú)", 15));
+        a.inserta(new Rival (nombre, 15));
         
         for (int i = 0; i < 7; i++) {
             a.inserta(l.getRival(i));
         }
         
-        // Crea la interfaz del menú principal y la hace visible con el aspecto establecido
-        MenuPrincipal.main(args);
-        MenuPrincipal menu = new MenuPrincipal();
-        menu.setVisible(true);
-        
-        // Mientras se esté en el menú principal, permance en el ciclo
-        while (menu.isEnabled()) {                                              
-            try {
-                Thread.sleep(100); // Pequeña pausa para no saturar el hilo principal
-            } 
-            catch (InterruptedException e) {
-            }
-        }
-
         // Ciclo Principal de Juego (Tres Rivales)
         do {
             // Una vez iniciada la partida, se crea un jugador
@@ -122,7 +140,7 @@ public class MainJuego {
                 jugador.seleccionTropas(numeroRonda);
 
                 // Iniciar batalla
-                Batalla batalla = new Batalla(numRival, jugador, cpu, numeroRonda);
+                Batalla batalla = new Batalla(numRival, jugador, cpu, numeroRonda, a.getNombre(posicionRival));
                 batalla.iniciarBatalla();
 
                 // Almacena los resultados de la ronda

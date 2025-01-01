@@ -17,6 +17,7 @@ public class RivalPorCombatir extends javax.swing.JFrame {
     // Métodos
     public void setTextos () {
         textoRival.setText(rival);
+        textoJugador.setText(MainJuego.nombre);
     }
     
     @SuppressWarnings("unchecked")

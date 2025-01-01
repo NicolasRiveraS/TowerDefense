@@ -6,20 +6,22 @@ public class Batalla {
     private Jugador jugador;
     private CPU cpu;
     private int numeroRonda;
+    private String nombRival;
 
     // Constructor
-    public Batalla(int rival, Jugador jugador, CPU cpu, int numeroRonda) {
+    public Batalla(int rival, Jugador jugador, CPU cpu, int numeroRonda, String nombRival) {
         this.rival = rival;
         this.jugador = jugador;
         this.cpu = cpu;
         this.numeroRonda = numeroRonda;
+        this.nombRival = nombRival;
     }
 
     // Métodos
     
     // Inicio de la batalla (rondas)
     public void iniciarBatalla () {
-        TableroBatalla t = new TableroBatalla(rival, jugador, cpu, numeroRonda);
+        TableroBatalla t = new TableroBatalla(rival, jugador, cpu, numeroRonda, nombRival);
         t.setVisible(true);
         
         while (t.isVisible()) {
